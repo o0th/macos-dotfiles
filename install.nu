@@ -7,6 +7,25 @@ if (which brew | is-empty) {
 
 def main [] {
   let config = "/Users/o0th/.config"
+  
+  #
+  # neovim 
+  #
+  
+  print -n "neovim\n"
+  
+  let neovim_destination = $"($config)/nvim/lua/user"
+  let karabiner_source = $"($env.PWD)/.config/nvim/lua/user"
+
+  let operation = (brew info neovim | complete)
+  if ($operation | get exit_code) != 0 {
+    print -n "Installing neovim\n"
+    let operation = (brew install --cask neovim | complete)
+    if ($operation | get exit_code) != 0 {
+      print -n $"Failed to install neovim\n"
+      exit 1
+    }
+  }
 
   #
   # karabiner
