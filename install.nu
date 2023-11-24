@@ -39,7 +39,7 @@ def main [] {
   print -n $"Creating directory ($karabiner_destination)\n"
   let operation = (^ln -s ($karabiner_source) ($karabiner_destination) | complete)
   if ($operation | get exit_code) != 0 {
-    print -n $"Failed to create directory $(karabiner)\n"
+    print -n $"Failed to create directory $(karabiner_destination)\n"
     exit 1
   }
 }
