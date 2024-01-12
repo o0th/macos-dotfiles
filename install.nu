@@ -6,6 +6,7 @@ if (which brew | is-empty) {
 }
 
 def main [] {
+  let home = "/Users/o0th"
   let config = "/Users/o0th/.config"
   
   #
@@ -25,6 +26,41 @@ def main [] {
       print -n $"Failed to install neovim\n"
       exit 1
     }
+  }
+
+  #
+  # tmux 
+  #
+  
+  print -n "tmux\n"
+  
+  let tmux_destination = $"($home)/.tmux.conf"
+  let tmux_source = $"($env.PWD)/.tmux.conf"
+
+  let operation = (brew info tmux | complete)
+  if ($operation | get exit_code) != 0 {
+    print -n "Installing tmux\n"
+    let operation = (brew install --cask tmux | complete)
+    if ($operation | get exit_code) != 0 {
+      print -n $"Failed to install tmux\n"
+      exit 1
+    }
+  }
+
+  if ($tmux_destination | path exists) {
+    print -n $"Removing file ($tmux_destination)\n"
+    let operation = (^rm ($tmux_destination) | complete)
+    if ($operation | get exit_code) != 0 {
+      print -n $"Failed to remove file $(tmux_destination)\n"
+      exit 1
+    }
+  }
+
+  print -n $"Creating file ($tmux_destination)\n"
+  let operation = (^ln -s ($tmux_source) ($tmux_destination) | complete)
+  if ($operation | get exit_code) != 0 {
+    print -n $"Failed to create file $(tmux_destination)\n"
+    exit 1
   }
 
   #
